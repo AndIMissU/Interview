@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .box {
+      width: 300px;
+      height: 300px;
+      background: lightblue;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+
+  </div>
+  <script>
+    // 函数节流  mousemove scroll 加载数据  出现指示 ajax
+    // 函数执行的太频繁 内存的使用加大 页面性能会加大 到死 所以我们需要减少执行
+    // 函数节流的意思就是将函数执行的次数减少 
+    // 所以我们可以增长时间 比如 50ms  就在一定时间只执行一次
+
+// 闭包就是函数运行的时候可以引用作用域里面的变量
+    let throttle = (fn, delay = 50) => {
+      let statetime = 0;
+      return function(...args) {
+        let curTime = new Date();
+        if(curTime - statetime >= delay) {
+          fn.apply(this, args);
+          statetime = curTime;
+        }
+      }
+    }
+    function doMousemove(event) {
+      console.log(event.clientX, event.clientY);
+    }
+    let slowMousemove = throttle(doMousemove);
+    const oBox = document.querySelector('.box');
+    oBox.addEventListener('mousemove', (event) => {
+      slowMousemove(event);
+    })
+  </script>
+</body>
+</html>

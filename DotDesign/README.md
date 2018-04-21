@@ -4,4 +4,4 @@
 ![基本布局][1]
 
 
-  [1]: /img/点趣科技.jpg
+  [1]: ./img/DotDesign.jpg

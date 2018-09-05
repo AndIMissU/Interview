@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>点趣科技</title>
+  <link rel="stylesheet" href="./DotDesign.css">
+</head>
+<body>
+  <div class="container">
+    <div class="head">
+      <input class="select-all" id="selectallthing" type="checkbox"> 全选
+      <span class="head-product-name">商品信息</span>
+      <span class="head-product-price">单价</span>
+      <span class="head-product-num">数量</span>
+      <span class="head-product-total">金额</span>
+      <span class="head-product-operation">操作</span>
+    </div>
+    <div class="body">
+      <div class="body-item">
+        <div class="body-item-title">
+          <input type="checkbox" class="body-item-choose" id="product-item-select"> 
+          <span class="body-item-name">天猫超市</span>店铺：天猫超市生鲜店
+            <svg class="icon icon-aliww" aria-hidden="true">
+              <use xlink:href="#icon-pinpaibiaoshi-aliwangwang"></use>
+            </svg>
+          <div class="body-item-product" id="product-item">
+            <ul class="body-item-productlist" >
+              <li class="body-item-product-item">
+                <div class="body-item-product-item-container">
+                  <input type="checkbox" class="body-item-product-item-choose" >
+                  <div class="body-item-product-item-img-container"><img id="product-item-img" class="body-item-product-item-img" src="./img/orange.jpg"/></div>
+                  <p class="body-item-product-item-name">[天猫超市]南非葡萄柚6个250g以上/个</p>
+                  <svg class="icon" aria-hidden="true">
+                      <use xlink:href="#icon-xinyongqiarenzheng"></use>
+                  </svg>
+                  <svg class="icon" aria-hidden="true">
+                      <use xlink:href="#icon-xinyongshenghuo"></use>
+                  </svg>
+                  <div class="body-item-product-priceinfo body-item-product-opinfo">
+                      <p class="body-item-product-price">¥29.90</p>
+                      <select id="body-item-product-priceSale">
+                          <option value="1">卖家促销</option>
+                          <option value="2">卖家不促销哦</option>
+                        </select>
+                  </div>
+                  <div class="body-item-product-numinfo body-item-product-opinfo">
+                    <button id="minus" class="minustotalnum" onclick="minusnum(this)">-</button>
+                    <span id="realnum" class="body-item-product-num">1</span>
+                    <button id="add" class="addtotalnum" onclick="addnum(this)">+</button>
+                    <p class="body-item-product-numinfo-max">限购5件</p>
+                  </div>
+                  <div class="body-item-product-totalinfo body-item-product-opinfo">
+                    <p class="body-item-product-totalinfo-price">¥29.90</p>
+                    <p class="body-item-product-totalinfo-weight">(1.5kg)</p>
+                  </div>
+                  <div class="body-item-product-operationinfo body-item-product-opinfo">
+                    <p>移入收藏夹</p>
+                    <p onclick="remove(this)">删除</p>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="body-item-pack">
+            <div class="body-item-info">享满50.00元（5kg以内）包邮</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <input type="checkbox" class="select-all" id="selectall"> 全选
+      <span class="footer-operate" onclick="batchRemove()">删除</span>
+      <span class="footer-operate">移入收藏夹</span>
+      <span class="footer-operate">分享</span>
+      <span class="footer-choose-product">已选商品 <span class="footer-num">0</span> 件</span>
+      <span class="footer-total-price">合计（不含运费）: <span class="footer-total-price-num">0</span></span>
+      <div class="footer-count">结算</div>
+    </div>
+  </div>
+  <!-- iconfont的引入和样式 -->
+  <script src="http://at.alicdn.com/t/font_636954_8051hpy5eo9cz0k9.js"></script>
+  <style type="text/css">
+    .icon {
+      width: 1em; height: 1em;
+      vertical-align: -0.15em;
+      fill: currentColor;
+      overflow: hidden;
+    }
+</style>
+<script src="./DotDesign.js"></script>
+</body>
+</html>

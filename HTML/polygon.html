@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="triangle-zheng"></div>
+  <div id="triangle-left"></div>
+  <div id="triangle-right"></div>
+  <div id="paralell"></div>
+  <div id="tixing"></div>
+</body>
+<style>
+  /* 正三角形 */
+  #triangle-zheng {
+    width: 0;
+    height: 0;
+    float: left;
+    border-left: 60px solid transparent;
+    border-right: 60px solid transparent;
+    border-bottom: 100px solid lightblue;
+  }
+  /* 直角三角形-左 */
+  #triangle-left {
+    width: 0;
+    height: 0;
+    float: left;
+    border-right: 100px solid transparent;
+    border-bottom: 100px solid lightblue;
+  }
+  /* 直角三角形-右 */
+  #triangle-right {
+    width: 0;
+    height: 0;
+    float: left;
+    border-left: 100px solid transparent;
+    border-bottom: 100px solid lightblue;
+  }
+  /* 平行四边形 */
+  #paralell {
+    float: left;
+    width: 150px;
+    height: 100px;
+    margin-left: 20px;
+    transform: skew(20deg);
+    background: red;
+  }
+  /* 梯形 */
+  #tixing {
+    width: 100px;
+    float: left;
+    border-left: 30px solid transparent;
+    border-right: 30px solid transparent;
+    border-bottom: 100px solid lightblue;
+    margin-left: 20px;
+  }
+</style>
+</html>

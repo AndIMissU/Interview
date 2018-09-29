@@ -55,8 +55,7 @@ function rectCover(number) {
  * 求1+2+3+...+n，要求不能使用乘除法、for、while、if、else、switch、case等关键字及条件判断语句（A?B:C）。
  */
 function Sum_Solution(n) {
-  let a = Array(n).fill(1)
-  if (n === 1 ) return a.length
+  if (n === 1 ) return n
   let t = Array(Sum_Solution(n-1)).fill(1)
   t = t.concat(Array(n).fill(1))
   return t.length
@@ -132,8 +131,7 @@ function reOrderArray(array) {
   for (let i = 0, len = array.length; i < len; i++) {
     if (array[i]%2 !== 0) {
       temp = array[i]
-      array.splice(i,1)
-      array.unshift(temp)
+      array.splice(i,1).unshift(temp)
       n++
     }
   }

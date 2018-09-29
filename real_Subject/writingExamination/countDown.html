@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+  function timer (time) {
+    function getDate(second) {
+      let date = {}
+      date.second = second % 60 // 秒
+      second = Math.floor(second / 60)
+      date.min = second % 60 // 分
+      second = Math.floor(second / 60)
+      date.hour = second % 24
+      date.day = Math.floor(second / 24)
+      countTime(date)
+    }
+    function countTime (date) {
+      let tick = setInterval(()=>{
+        render(date)
+        if (date.second > 0) date.second --
+        else {
+          if (date.min > 0) {
+            date.min --
+            date.second = 59
+          }
+          else {
+            if (date.hour > 0) {
+              date.hour --
+              date.min = 59
+            }
+            else {
+              if (date.day > 0) {
+                date.day--
+                date.hour = 23
+                date.min = 59
+                date.second = 59
+              }
+              else {
+                clearInterval(tick)
+              }
+            }
+          }
+        }
+      },1000)
+    }
+    function render(date) { div.innerText = ruleStyle(date.day)+':'+ruleStyle(date.hour)+':'+ruleStyle(date.min)+':'+ruleStyle(date.second) }
+    function ruleStyle(t) { return t<10 ? '0'+t:t }
+    let div = document.createElement('div')
+    div.style.cssText = "width: 90px; background-color: #333;color: #fff;text-align:center;border-raduis:3px"
+    getDate(time) // 执行获取时间
+    document.body.appendChild(div)
+  }
+  timer(86410)
+</script>
+</html>

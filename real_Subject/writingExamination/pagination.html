@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <ul class="pagination" id="jsPagination">
+    <li>首页</li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li>末页</li>
+  </ul>
+  <style>
+  .hide{
+    display: none!important;
+  }
+  .pagination{
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+    text-align: center;
+  }
+  .pagination li{
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+    line-height: 30px;
+    margin: 0 5px 0 0;
+    font-size: 14px;
+    text-align: center;
+    border: 1px solid #00bc9b;
+    color: #00bc9b;
+    cursor: pointer;
+  }
+  .pagination li.current,
+  .pagination li:hover{
+    background: #00bc9b;
+    color: #ffffff;
+  }
+  .demo {
+    margin: 10px 0;
+    padding: 10px;
+    background: #eeeeee;
+    text-align: center;
+  }
+  </style>
+</body>
+<script>
+  function pagination(total, current) {
+    let arr = document.getElementsByTagName('li')
+    let container = document.getElementById('jsPagination')
+    if (total === 0 || current <= 0 || current > total) container.classList.add('hide')
+    else if (total <= 5) {
+      arr[0].classList.add('hide')
+      for (let i = 0;i<arr.length; i++) {
+        if (i >total) arr[i].classList.add('hide')
+        else arr[i].innerText = i
+      }
+      arr[current].classList.add('current')
+    }
+    else {
+      let n = current - 2
+      if (current + 2 > total) {
+        n = total - 4
+        arr[6].classList.add('hide')
+      } if (current - 2 < 0) {
+        n = 1
+        arr[0].classList.add('hide')
+      }
+      for (let i = 1; i < arr.length-1; i++) {
+        arr[i].innerHTML = n
+        if (n===current) arr[i].classList.add('current')
+        n++
+      }
+    }
+  }
+  pagination(10,0)
+</script>
+</html>

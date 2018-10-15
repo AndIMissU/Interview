@@ -64,3 +64,32 @@ function selectionSort(arr) {
   return arr
 }
 ```
+
+### 插入排序
+- **直接插入排序**
+  ``` JS
+  /**
+   * 直接插入排序
+  * @param { array } arr 
+  */
+  function insertSort(arr) {
+    let j, temp
+    for(let i = 1, len = arr.length; i < len; i++) {
+      j = i-1
+      while(j) {
+        if(arr[j+1]<arr[j]) {
+          temp = arr[j+1]
+          arr[j+1] = arr[j]
+          arr[j] = temp
+        }
+        else break
+        j--
+      }
+    }
+    return arr
+  }
+  ```
+- **二分插入排序**
+  ```JS
+  
+  ```

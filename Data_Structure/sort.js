@@ -63,26 +63,34 @@ function selectionSort(arr) {
  * @param { array } arr 
  */
 function insertSort(arr) {
-  let newArr = [arr[0]]
-  let i = 1
-  while(i <= arr.length) {
-    for(let j = newArr.length -1; j >= 0; j--){
-      if(arr[i] < newArr[j]) {
-        newArr[j+1] = newArr[j]
-        newArr[j] = arr[i]
-      } else {
-        newArr.push(arr[i])
-        break
+  let j, temp
+  for(let i = 1, len = arr.length; i < len; i++) {
+    j = i-1
+    while(j) {
+      if(arr[j+1]<arr[j]) {
+        temp = arr[j+1]
+        arr[j+1] = arr[j]
+        arr[j] = temp
       }
+      else break
+      j--
     }
-    i++
-    console.log(i)
-    console.log(newArr.length)
   }
-  return newArr
+  return arr
 }
 
+/**
+ * 二分插入排序
+ * @param { array } arr 
+ */
+function binaryInsertSort(arr) {
+  let j, temp, mid
+  let left, right
+  for (let i = 2, len = arr.length; i < len; i++) {
 
-
-let arr = [1,88,3,2,4,8,7, '1']
+  }
+  return arr
+}
+let arr = [1,88,3,2,4,8,7, '1', 'a', 'b', 'c']
 console.log(insertSort(arr))
+

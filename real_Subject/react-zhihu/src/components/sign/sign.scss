@@ -1,0 +1,31 @@
+.sign {
+    min-width: 1360px;
+    min-height: 100vh;
+    background: #b8e5f8 url('https://static.zhihu.com/heifetz/sign_bg.db29b0fbd2f78dd8c1b7.png') no-repeat;
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    .sign-container {
+      width: 432px;
+      background-color: #fff;
+  
+      .sign-header {
+        padding-top: 8px;
+        text-align: center;
+  
+        img {
+          width: 140px;
+        }
+
+        p {
+          color: #0084ff;
+          font-size: 22px;
+        }
+      }
+    }
+  }
+  

@@ -1,31 +1,81 @@
 .sign {
-    min-width: 1360px;
-    min-height: 100vh;
-    background: #b8e5f8 url('https://static.zhihu.com/heifetz/sign_bg.db29b0fbd2f78dd8c1b7.png') no-repeat;
-    -moz-background-size: cover;
-    -webkit-background-size: cover;
-    background-size: cover;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  
-    .sign-container {
-      width: 432px;
-      background-color: #fff;
-  
-      .sign-header {
-        padding-top: 8px;
-        text-align: center;
-  
-        img {
-          width: 140px;
-        }
+  min-width: 1200px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #b8e5f8 url('https://static.zhihu.com/heifetz/sign_bg.db29b0fbd2f78dd8c1b7.png') no-repeat;
 
-        p {
-          color: #0084ff;
-          font-size: 22px;
-        }
+  .signInfo {
+    width: 432px;
+  }
+
+  .sign-container {
+    width: 432px;
+    background-color: #fff;
+
+    .sign-header {
+      padding-top: 30px;
+      text-align: center;
+
+      p {
+        margin-top: 12px;
+        font-size: 22px;
+        color: #0084ff;
       }
     }
-  }
+
+    .sign-body {
+      overflow: hidden;
+      position: relative;
+
+      .signInfoTip {
+        height: 58px;
+        line-height: 58px;
+        font-size: 16px;
+        background-color: #f6f6f6;
+        border-top: 1px solid #ebebeb;
+        text-align: center;
   
+        span {
+          color: #175199;
+          cursor: pointer;
+        }
+      }
+
+      .showDownloadCode {
+        position: absolute;
+        width: 100%;
+        height: calc(100% - 8px);
+        bottom: 0;
+        box-shadow: 0 0 8px 0 rgba(26,26,26,.15);
+        background: #fff url(https://www.zhihu.com/static/revved/img/index/qr-code@2x.2607d448.png) no-repeat center;
+        -moz-background-size: 250px 250px;
+        -webkit-background-size: 250px 250x;
+        background-size: 250px 250px;
+        transition: opacity .3s, height .3s;
+      }
+  
+      .showDownloadCode-hidden {
+        opacity: 0;
+        height: 0;
+        bottom: 0;
+      }
+    }
+
+    
+  }
+
+  .downloadBtn {
+    width: 432px;
+    height: 42px;
+    margin: 30px auto 0;
+    color: #fff;
+    background-color: #8590a6;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 14px;
+  }
+}

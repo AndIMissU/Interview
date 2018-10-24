@@ -22,6 +22,11 @@ class signIn extends Component {
       passwordState: false
     }
   }
+  passwordType() {
+    this.setState({
+      passwordState: !this.state.passwordState
+    })
+  }
   render() {
     return (
       <div className="signin-body">
@@ -30,12 +35,12 @@ class signIn extends Component {
             <input type="text" placeholder="手机号或邮箱"/>
           </div>
           <div className="signin-password">
-            <input type={this.state.passwordState? "text":"password"}  placeholder="密码"/>
-            <img src={this.state.passwordState? EyeOpen:EyeClose} alt="passwordImg"/>
+            <input type={ this.state.passwordState ? "text" : "password" }  placeholder="密码"/>
+            <img onClick={ ()=>this.passwordType() } src={ this.state.passwordState ? EyeOpen : EyeClose } alt="passwordImg"/>
           </div>
           <div className="signin-options">
-            <button className="signin-options-switchType">{PWDLOGIN[this.state.defaultPwdLogin].verType}</button>
-            <button className="signin-options-info">{PWDLOGIN[this.state.defaultPwdLogin].info}</button>
+            <button className="signin-options-switchType">{ PWDLOGIN[this.state.defaultPwdLogin].verType }</button>
+            <button className="signin-options-info">{ PWDLOGIN[this.state.defaultPwdLogin].info }</button>
           </div>
         </div>
       </div>

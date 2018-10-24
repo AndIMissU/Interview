@@ -11,7 +11,7 @@ import HeaderLogo from '../../static/sign/headerIcon.svg';
  * 1 表示注册页面
  */
 const STATUS = {
-  login: {
+  signin: {
     title: "登录知乎，发现更大的世界",
     btnName: "注册",
     footerTip: "没有账号？"
@@ -28,25 +28,30 @@ const DOWNLOAD = {
   show: "关闭二维码"
 }
 
+const SIGNIN = "signin"
+const SIGNUP = "signup"
+const SHOW = "show"
+const CLOSE = "close"
+
 class Sign extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      defaultState: "login",
-      defaultDownload: "close"
+      defaultState: SIGNIN,
+      defaultDownload: CLOSE
     }
   }
   changeState() {
     this.setState({
-      defaultState: this.state.defaultState === "login" ? "signup": "login"
+      defaultState: this.state.defaultState === SIGNIN ? SIGNUP : SIGNIN
     })
   }
   showDownloadCode() {
     this.setState({
-      defaultDownload: this.state.defaultDownload === "show"? "close": "show"
+      defaultDownload: this.state.defaultDownload === SHOW? CLOSE : SHOW
     },()=>{
-      console.log(this.state.defaultDownload+ "Code")
+      console.log(this.state.defaultDownload)
     })
   }
   render() {
@@ -58,17 +63,15 @@ class Sign extends Component {
             <p>{ STATUS[this.state.defaultState].title }</p>
           </div>
           <div className="sign-body">
-            { this.state.defaultState === "login"? <SignIn /> : <SignUp /> }
+            { this.state.defaultState === SIGNIN ? <SignIn /> : <SignUp /> }
             <div className="signInfoTip">
               { STATUS[this.state.defaultState].footerTip }
-              <span onClick={ () => this.changeState() }>{ STATUS[this.state.defaultState].btnName }</span>
+              <span onClick={ () => this.changeState()} >{STATUS[this.state.defaultState].btnName}</span>
             </div>
-            <div className={this.state.defaultDownload === "show"? "showDownloadCode": "showDownloadCode showDownloadCode-hidden"}></div>
+            <div className={ this.state.defaultDownload === SHOW ? "showDownloadCode": "showDownloadCode showDownloadCode-hidden" }></div>
           </div>
         </div>
-        <div>
-          <button className="downloadBtn" onClick={()=>this.showDownloadCode()}>{DOWNLOAD[this.state.defaultDownload]}</button>
-        </div>
+        <button className="downloadBtn" onClick={ ()=>this.showDownloadCode() }>{ DOWNLOAD[this.state.defaultDownload] }</button>
       </div>
     );
   }

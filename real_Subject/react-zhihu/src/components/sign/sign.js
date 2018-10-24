@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import './sign.scss';
 import SignIn from '../signin/signin';
 import SignUp from '../signup/signup';
-import HeaderLogo from '../../static/sign/headerIcon.svg';
+import HeaderLogo from 'static/sign/headerIcon.svg';
 
 /**
  * 0 表示登录页面
@@ -56,22 +56,22 @@ class Sign extends Component {
   }
   render() {
     return (
-      <div className="sign">
-        <div className="sign-container">
-          <div className="sign-header">
+      <div className="sign-wrap">
+        <div className="container">
+          <div className="header">
             <img src={ HeaderLogo } alt="headerIcon"/>
             <p>{ STATUS[this.state.defaultState].title }</p>
           </div>
-          <div className="sign-body">
+          <div className="body">
             { this.state.defaultState === SIGNIN ? <SignIn /> : <SignUp /> }
-            <div className="signInfoTip">
+            <div className="info-tip">
               { STATUS[this.state.defaultState].footerTip }
               <span onClick={ () => this.changeState()} >{STATUS[this.state.defaultState].btnName}</span>
             </div>
-            <div className={ this.state.defaultDownload === SHOW ? "showDownloadCode": "showDownloadCode showDownloadCode-hidden" }></div>
+            <div className={ this.state.defaultDownload === SHOW ? "download-code": "download-code close-download-code" }></div>
           </div>
         </div>
-        <button className="downloadBtn" onClick={ ()=>this.showDownloadCode() }>{ DOWNLOAD[this.state.defaultDownload] }</button>
+        <button className="download-btn" onClick={ ()=>this.showDownloadCode() }>{ DOWNLOAD[this.state.defaultDownload] }</button>
       </div>
     );
   }

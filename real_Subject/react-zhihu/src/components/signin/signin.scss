@@ -50,25 +50,25 @@
     justify-content: space-between;
     margin-top: 12px;
     height: 20px;
-
-    button {
-    border: none;
-    outline: none;
-    font-size: 14px;
-    background-color: #fff;
-    cursor: pointer;
-    }
+    line-height: 20px;
     
     .switch-type {
-    color: #175199;
+      border: none;
+      outline: none;
+      font-size: 14px;
+      color: #175199;
+      background-color: #fff;
+      cursor: pointer;
 
-    &:hover {
-      color: #8590a6;
-    }
+      &:hover {
+        color: #8590a6;
+      }
     }
 
     .plain {
+      font-size: 14px;
       color: #8590a6;
+      cursor: pointer;
 
       &:hover {
         color: gray;
@@ -80,6 +80,7 @@
     margin-top: 30px;
     border: none;
     border-radius: 3px;
+    outline: none;
     width: 100%;
     height: 36px;
     font-size: 14px;
@@ -94,14 +95,14 @@
 
   .other-types {
     display: flex;
-    align-items: space-between;
+    justify-content: center;
     margin-top: 16px;
     height: 25px;
-    text-align: center;
     color: #8590a6;
 
     button {
       border: none;
+      outline: none;
       font-size: 14px;
       background-color: #fff;
       color: #8590a6;
@@ -110,6 +111,12 @@
       &:hover {
         color: gray;
       }
+    }
+
+    span {
+      width: 6%;
+      line-height: 25px;
+      text-align: center;
     }
   }
 }

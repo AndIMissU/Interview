@@ -38,7 +38,7 @@ class Sign extends Component {
     super(props);
 
     this.state = {
-      defaultState: SIGNIN,
+      defaultState: SIGNUP,
       defaultDownload: CLOSE
     }
   }

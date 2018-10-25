@@ -6,7 +6,8 @@ import EyeClose from 'static/sign/eyeClose.svg';
 const PWDLOGIN = {
   pwd: {
     verType: "手机验证码登录",
-    info: "忘记密码？"
+    info: "忘记密码？",
+    href: 'https://www.zhihu.com/account/password_reset'
   },
   vercode: {
     verType: "密码登录（手机号或邮箱）",
@@ -52,7 +53,7 @@ class signIn extends Component {
         </div>
         <div className="options">
           <button className="switch-type">{ PWDLOGIN[this.state.defaultPwdLogin].verType }</button>
-          <button className="plain">{ PWDLOGIN[this.state.defaultPwdLogin].info }</button>
+          <a className="plain" href="asdsajdk">{ PWDLOGIN[this.state.defaultPwdLogin].info }</a>
         </div>
         <button className="submit">登录</button>
         <div className="other-types">

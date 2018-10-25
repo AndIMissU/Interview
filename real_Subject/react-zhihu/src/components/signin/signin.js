@@ -45,15 +45,15 @@ class signIn extends Component {
         </div>
         <div className="password">
           <input className={this.state.password.length?'':'no-password'} 
-            type={ this.state.passwordState ? "text" : "password" }  
+            type={this.state.passwordState ? "text" : "password"}  
             placeholder="密码" 
-            value={ this.state.password } 
-            onChange={ this.passwordSet } />
-          <img onClick={ this.passwordType } src={ this.state.passwordState ? EyeOpen : EyeClose } alt="passwordImg"/>
+            value={this.state.password} 
+            onChange={this.passwordSet} />
+          <img onClick={this.passwordType} src={this.state.passwordState ? EyeOpen : EyeClose} alt="passwordImg"/>
         </div>
         <div className="options">
-          <button className="switch-type">{ PWDLOGIN[this.state.defaultPwdLogin].verType }</button>
-          <a className="plain" href="asdsajdk">{ PWDLOGIN[this.state.defaultPwdLogin].info }</a>
+          <button className="switch-type">{PWDLOGIN[this.state.defaultPwdLogin].verType}</button>
+          <a className="plain" href="asdsajdk">{PWDLOGIN[this.state.defaultPwdLogin].info}</a>
         </div>
         <button className="submit">登录</button>
         <div className="other-types">

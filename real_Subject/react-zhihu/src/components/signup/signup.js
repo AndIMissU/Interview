@@ -48,7 +48,8 @@ class signUp extends Component {
     super(props)
     this.state = {
       phoneNumber: '',
-      noPhoneNumberTip: true,
+      noPhoneNumber: false,
+      invalidPhoneNumber: false,
       showCountryList: false,
       defaultVerificationMethod: MESSAGE,
       currentCountry: COUNTRY_LIST[0]
@@ -58,6 +59,7 @@ class signUp extends Component {
     this.changeCountryListState = this.changeCountryListState.bind(this)
     this.chooseCountry = this.chooseCountry.bind(this)
     this.changeSignUpMethod = this.changeSignUpMethod.bind(this)
+    this.focusPhoneInput = this.focusPhoneInput.bind(this)
   }
 
   // 绑定对应内容变化事件
@@ -80,18 +82,22 @@ class signUp extends Component {
   // 获取验证码
   getVerificationCode() {
     this.checkForm()
-    // if(!this.checkForm()) return
-
   }
   // 验证表单
   checkForm() {
     this.setState({
-      noPhoneNumberTip: !!this.state.phoneNumber
-    },()=>{
-      console.log(this.state.noPhoneNumberTip)
+      noPhoneNumber: !this.state.phoneNumber,
+      invalidPhoneNumber: this.state.currentCountry === COUNTRY_LIST[0] && !/^1[34578]\d{9}$/.test(this.state.phoneNumber)
     })
   }
-
+  // 聚焦手机号的输入框时 隐藏报错提示
+  focusPhoneInput() {
+    this.phoneNumberInput.focus()  // 自动聚焦手机号这个输入框
+    this.setState({
+      noPhoneNumber: false,
+      invalidPhoneNumber: false
+    })
+  }
   // 是否显示国家列表
   changeCountryListState() {
     this.setState({
@@ -100,11 +106,10 @@ class signUp extends Component {
   }
   // 是否渲染国家列表信息
   countryList() {
-    if(!this.state.showCountryList) return
     return (
-      <ul className="country-list" onClick={ this.chooseCountry }>
+      <ul className="country-list" onClick={this.chooseCountry}>
         {COUNTRY_LIST.map((country, index) => (
-          <li key={ index }>{ country }</li>
+          <li key={index}>{country}</li>
         ))}
       </ul>
     )
@@ -114,18 +119,26 @@ class signUp extends Component {
     return (
       <div className="signup-wrap">
         <div className="account">
-          <div className="select-counrty" onClick={ this.changeCountryListState }>
-            { this.state.currentCountry }
-            { this.countryList()}
+          <div className="select-counrty" onClick={this.changeCountryListState}>
+            {this.state.currentCountry}
+            {this.state.showCountryList?this.countryList():''}
           </div>
           <span>&nbsp;</span>
-          <input className={ this.state.noPhoneNumberTip?'error-tip':'' } type="text" placeholder="手机号" onChange={ this.setPhoneNumber }/>
+          <div className={`phone-wrap ${this.state.noPhoneNumber?'no-phone-number':''} 
+            ${this.state.invalidPhoneNumber? 'invalid-phone-number':''}`}
+            onClick={this.focusPhoneInput}>
+            <input ref={(input) => { this.phoneNumberInput = input; }} 
+              className={this.state.noPhoneNumber?'error-tip':''} 
+              type="text" 
+              placeholder="手机号" 
+              onChange={this.setPhoneNumber}/>
+          </div>
         </div>
         <div className="verification-code">
-          <input type="text" placeholder={ VERIFICATION_METHOD[this.state.defaultVerificationMethod].placeholderTip }/>
-          <p>{ VERIFICATION_METHOD[this.state.defaultVerificationMethod].VerificationCodeWay }</p>
+          <input type="text" placeholder={VERIFICATION_METHOD[this.state.defaultVerificationMethod].placeholderTip}/>
+          <p>{VERIFICATION_METHOD[this.state.defaultVerificationMethod].VerificationCodeWay}</p>
         </div>
-        <p onClick={ this.changeSignUpMethod }>{ VERIFICATION_METHOD[this.state.defaultVerificationMethod].anotherMethod }</p>
+        <p onClick={this.changeSignUpMethod}>{VERIFICATION_METHOD[this.state.defaultVerificationMethod].anotherMethod}</p>
         <button className="subbmit">注册</button>
         <div className="agreement">
           <span>注册即代表同意

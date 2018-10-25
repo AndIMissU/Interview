@@ -1,6 +1,6 @@
 
 
-import React, { Component } from 'react';
+import React, {Component } from 'react';
 import './sign.scss';
 import SignIn from '../signin/signin';
 import SignUp from '../signup/signup';
@@ -38,20 +38,20 @@ class Sign extends Component {
     super(props);
 
     this.state = {
-      defaultState: SIGNUP,
-      defaultDownload: CLOSE
+      currentState: SIGNUP,
+      currentDownload: CLOSE
     }
   }
   changeState() {
     this.setState({
-      defaultState: this.state.defaultState === SIGNIN ? SIGNUP : SIGNIN
+      currentState: this.state.currentState === SIGNIN ? SIGNUP : SIGNIN
     })
   }
   showDownloadCode() {
     this.setState({
-      defaultDownload: this.state.defaultDownload === SHOW? CLOSE : SHOW
+      currentDownload: this.state.currentDownload === SHOW? CLOSE : SHOW
     },()=>{
-      console.log(this.state.defaultDownload)
+      console.log(this.state.currentDownload)
     })
   }
   render() {
@@ -59,19 +59,19 @@ class Sign extends Component {
       <div className="sign-wrap">
         <div className="container">
           <div className="header">
-            <img src={ HeaderLogo } alt="headerIcon"/>
-            <p>{ STATUS[this.state.defaultState].title }</p>
+            <img src={HeaderLogo} alt="headerIcon"/>
+            <p>{STATUS[this.state.currentState].title}</p>
           </div>
           <div className="body">
-            { this.state.defaultState === SIGNIN ? <SignIn /> : <SignUp /> }
+            {this.state.currentState === SIGNIN ? <SignIn /> : <SignUp />}
             <div className="info-tip">
-              { STATUS[this.state.defaultState].footerTip }
-              <span onClick={ () => this.changeState()} >{STATUS[this.state.defaultState].btnName}</span>
+              {STATUS[this.state.currentState].footerTip}
+              <span onClick={() => this.changeState()} >{STATUS[this.state.currentState].btnName}</span>
             </div>
-            <div className={ this.state.defaultDownload === SHOW ? "download-code": "download-code close-download-code" }></div>
+            <div className={this.state.currentDownload === SHOW ? "download-code": "download-code close-download-code"}></div>
           </div>
         </div>
-        <button className="download-btn" onClick={ ()=>this.showDownloadCode() }>{ DOWNLOAD[this.state.defaultDownload] }</button>
+        <button className="download-btn" onClick={()=>this.showDownloadCode()}>{DOWNLOAD[this.state.currentDownload]}</button>
       </div>
     );
   }

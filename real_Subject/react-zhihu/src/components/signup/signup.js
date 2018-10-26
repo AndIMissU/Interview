@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './signup.scss';
 
-// 各国国家代码
+// 各国国家区号
 const COUNTRY_LIST = [ '中国 +86', '美国 +1', '日本 +81', '中国香港 +852', '中国台湾 +886', '马来西亚 +60', '澳大利亚 +61', 
   '加拿大 +1', '英国 +44', '新加坡 +65', '德国 +49', '俄罗斯 +7', '埃及 +20', '南非 +27', '希腊 +30', '荷兰 +31', '比利时 +32',
   '法国 +33', '西班牙 +34', '匈牙利 +36', '意大利 +39', '罗马尼亚 +40', '瑞士 +41', '奥地利 +43', '丹麦 +45',  '瑞典 +46',
@@ -41,32 +41,44 @@ const VERIFICATION_METHOD = {
   }
 }
 
-const MESSAGE = "useMessage"
-const VOICE = "useVoice"
+const MESSAGE = 'useMessage'
+const VOICE = 'useVoice'
+const MAX_SECOND = 5      // 默认等待的秒数
 class signUp extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      phoneNumber: '',
-      noPhoneNumber: false,
-      invalidPhoneNumber: false,
-      verificationCode: '',
-      showCountryList: false,
-      currentVerificationMethod: MESSAGE,
-      currentCountry: COUNTRY_LIST[0]
+      currentVerificationMethod: MESSAGE,  // 当前注册发送验证码的方式
+
+      phoneNumber: '',   // 手机号
+      noPhoneNumber: false,  // 是否没有填入手机号
+      invalidPhoneNumber: false, // 手机号是否无效
+
+      verificationCode: '',  // 验证码
+      noVerficationCode: false,  // 是否没有填入验证码
+      invalidVerificationCode: false,  // 验证码是否无效
+      isSendVerficationCode: false,  // 验证码是否发送
+      reSendVerficationCode: false,  // 是否重新发送验证码
+      currentSecond: MAX_SECOND,  // 当前剩余等待的秒数
+
+      showCountryList: false,  // 是否显示城市列表
+      currentCountry: COUNTRY_LIST[0],  // 当前国家
+      currentCountryCode: COUNTRY_LIST[0].split(' ')[1]  // 当前国家的 手机区号
     }
+
     // 构造函数的绑定
     this.changeCountryListState = this.changeCountryListState.bind(this)
     this.chooseCountry = this.chooseCountry.bind(this)
     this.setPhoneNumber = this.setPhoneNumber.bind(this)
     this.changeSignUpMethod = this.changeSignUpMethod.bind(this)
     this.focusPhoneInput = this.focusPhoneInput.bind(this)
+    this.focusVerificationCodeInput = this.focusVerificationCodeInput.bind(this)
     this.setVerifivationCode = this.setVerifivationCode.bind(this)
     this.getVerificationCode = this.getVerificationCode.bind(this)
+    this.requireRegisterState = this.requireRegisterState.bind(this)
   }
 
   // 绑定对应内容变化事件
-  chooseCountry(e) { this.setState({ currentCountry: e.target.innerHTML }) } // 选择国家
   setPhoneNumber(e){ this.setState({ phoneNumber: e.target.value }) } // 输入手机号码
   setVerifivationCode(e) { this.setState({ verificationCode: e.target.value }) } // 输入验证码
 
@@ -77,52 +89,116 @@ class signUp extends Component {
    */
   changeSignUpMethod() {
     this.setState({
-      currentVerificationMethod: this.state.currentVerificationMethod === MESSAGE ? VOICE : MESSAGE
+      currentVerificationMethod: this.state.currentVerificationMethod === MESSAGE ? VOICE : MESSAGE,
     },()=>{
       this.getVerificationCode()
     })
   }
+
   // 获取验证码
   getVerificationCode() {
-    if(this.checkPhoneState()) {
-      let _countryCode = this.state.currentCountry.split(' ')[1]
-      alert(_countryCode + ' ' + this.state.phoneNumber + ' 请求' + VERIFICATION_METHOD[this.state.currentVerificationMethod].methodInfo)
+    if (!this.checkPhoneState()) return  // 如果手机号未填则返回
+    if (this.state.isSendVerficationCode) return  // 在60秒内验证码是已经发送的状态 如果已经发送则返回
+    this.setState({
+      isSendVerficationCode: true
+    },()=>{
+      let _timer = setInterval(()=>{
+        this.setState({
+          currentSecond: this.state.currentSecond - 1
+        })
+        if(this.state.currentSecond === 0) {
+          // 将当前秒数还原为默认状态 验证码变为未发送状态 重新发送验证码状态置为true
+          this.setState({
+            isSendVerficationCode: false,
+            reSendVerficationCode: true,
+            currentSecond: MAX_SECOND   
+          })
+          clearInterval(_timer)
+        }
+      },1000)
+    })
+    if (this.checkPhoneState()) {
+      alert(
+        this.state.currentCountryCode + ' '
+        + this.state.phoneNumber 
+        + ' 请求'
+        + VERIFICATION_METHOD[this.state.currentVerificationMethod].methodInfo
+      )
     }
   }
-  // 验证手机号状态
+
+  // 检查手机号状态
   checkPhoneState() {
     let _noPhoneNumber = !this.state.phoneNumber
     let _invalidPhoneNumber = false
-    if(!this.state.phoneNumber) _invalidPhoneNumber = false
-    else _invalidPhoneNumber = this.state.currentCountry === COUNTRY_LIST[0] && !/^1[34578]\d{9}$/.test(this.state.phoneNumber)
+    if (_noPhoneNumber) {
+      _invalidPhoneNumber = false
+    } else {
+      _invalidPhoneNumber = this.state.currentCountry === COUNTRY_LIST[0] && !/^1[34578]\d{9}$/.test(this.state.phoneNumber)
+    }
     this.setState({
       noPhoneNumber: _noPhoneNumber,
       invalidPhoneNumber: _invalidPhoneNumber
     })
     return !_noPhoneNumber && !_invalidPhoneNumber
   }
+
   // 聚焦手机号的输入框时 隐藏报错提示
   focusPhoneInput() {
-    this.phoneNumberInput.focus()  // 自动聚焦手机号的输入框
     this.setState({
       noPhoneNumber: false,
       invalidPhoneNumber: false
+    },()=>{
+      this.phoneNumberInput.focus()  // 自动聚焦手机号的输入框
     })
   }
-  // 验证验证码状态
-  checkVerificationCodeState() {
 
+  // 检查验证码状态
+  checkVerificationCodeState() {
+    let _noVerficationCode = !this.state.verificationCode
+    let _invalidVerificationCode = false
+    if (_noVerficationCode) {
+      _invalidVerificationCode = false
+    } else {
+      _invalidVerificationCode = !/^\d{6}$/.test(this.state.verificationCode)
+    }
+    this.setState({
+      noVerficationCode: _noVerficationCode,
+      invalidVerificationCode: _invalidVerificationCode
+    })
+    return !_noVerficationCode && !_invalidVerificationCode
   }
+
+  // 聚焦验证码的输入框时 隐藏报错提示
+  focusVerificationCodeInput() {
+    this.setState({
+      noVerficationCode: false,
+      invalidVerificationCode: false
+    },()=>{
+      this.verificationCodeInput.focus() // 自动聚焦验证码的输入框
+    })
+  }
+
   // 点击显示国家列表
   changeCountryListState() {
     this.setState({
       showCountryList: !this.state.showCountryList
     })
   }
+
+  // 选择国家
+  chooseCountry(e) {
+    let _currentCountry = e.target.innerHTML
+    let _currentCountryCode = _currentCountry.split(' ')[1]
+    this.setState({
+      currentCountry: _currentCountry,
+      currentCountryCode: _currentCountryCode
+    })
+  }
   // 渲染国家列表信息
   countryList() {
     return (
-      <ul className="country-list" onClick={this.chooseCountry}>
+      <ul className='country-list' onClick={this.chooseCountry}>
         {COUNTRY_LIST.map((country, index) => (
           <li key={index}>{country}</li>
         ))}
@@ -130,39 +206,60 @@ class signUp extends Component {
     )
   }
 
+  // 获取注册信息并传入信息
+  requireRegisterState() {
+    if (!this.checkPhoneState()) return
+    if (!this.checkVerificationCodeState()) return
+    alert(
+      '电话号码为：' + this.state.currentCountryCode + ' ' + this.state.phoneNumber
+      + '\n 验证码为：' + this.state.verificationCode
+    )
+  }
+
   render() {
     return (
-      <div className="signup-wrap">
-        <div className="account">
-          <div className="select-counrty" onClick={this.changeCountryListState}>
+      <div className='signup-wrap'>
+        <div className='account'>
+          <div className='select-counrty' onClick={this.changeCountryListState}>
             {this.state.currentCountry}
             {this.state.showCountryList?this.countryList():''}
           </div>
           <span>&nbsp;</span>
           <div className={`phone-wrap ${this.state.noPhoneNumber?'no-phone-number':''} 
-            ${this.state.invalidPhoneNumber? 'invalid-phone-number':''}`}
+            ${this.state.invalidPhoneNumber?'invalid-phone-number':''}`}
             onClick={this.focusPhoneInput}>
-            <input ref={(input) => { this.phoneNumberInput = input; }} 
+            <input ref={(input) => { this.phoneNumberInput = input }} 
               className={this.state.noPhoneNumber?'error-tip':''} 
-              type="text" 
-              placeholder="手机号" 
-              onBlur={this.setPhoneNumber}/>
+              onBlur={this.setPhoneNumber}
+              placeholder='手机号'
+              type='text' />
           </div>
         </div>
-        <div className={`verification-code ${}`}>
-          <input type="text"
+        <div className={`verification-code
+          ${this.state.noVerficationCode?('no-verfication-code-' + this.state.currentVerificationMethod):''}
+          ${this.state.invalidVerificationCode?'invalid-vertification-code':''}`}
+          onClick={this.focusVerificationCodeInput}>
+          <input ref={(input) => { this.verificationCodeInput = input }} 
             onChange={this.setVerifivationCode}
-            placeholder={VERIFICATION_METHOD[this.state.currentVerificationMethod].placeholderTip}/>
-          <p onClick={this.getVerificationCode}>{VERIFICATION_METHOD[this.state.currentVerificationMethod].methodInfo}</p>
+            placeholder={VERIFICATION_METHOD[this.state.currentVerificationMethod].placeholderTip}
+            type='text' />
+          <p onClick={this.getVerificationCode}
+            className={this.state.isSendVerficationCode?'timer-count-down':''}>
+            {(!this.state.isSendVerficationCode && this.state.reSendVerficationCode)?'重发':''}
+            {this.state.isSendVerficationCode?(this.state.currentSecond+' 秒后可重发'):VERIFICATION_METHOD[this.state.currentVerificationMethod].methodInfo}
+          </p>
         </div>
-        <p onClick={this.changeSignUpMethod}>{VERIFICATION_METHOD[this.state.currentVerificationMethod].anotherMethod}</p>
-        <button className="subbmit">注册</button>
-        <div className="agreement">
+        <div className={`not-send-verification-code ${this.state.isSendVerficationCode?'sent-verfication-code':''}`}
+          onClick={this.changeSignUpMethod}>
+          {VERIFICATION_METHOD[this.state.currentVerificationMethod].anotherMethod}
+        </div>
+        <button className='subbmit' onClick={this.requireRegisterState}>注册</button>
+        <div className='agreement'>
           <span>注册即代表同意
-            <a href="https://www.zhihu.com/terms">《知乎协议》</a>
-            <a href="https://www.zhihu.com/terms/privacy">《隐私政策》</a>
+            <a href='https://www.zhihu.com/terms'>《知乎协议》</a>
+            <a href='https://www.zhihu.com/terms/privacy'>《隐私政策》</a>
           </span>
-          <a href="https://www.zhihu.com/org/signup">注册机构号</a>
+          <a href='https://www.zhihu.com/org/signup'>注册机构号</a>
         </div>
       </div>
     )

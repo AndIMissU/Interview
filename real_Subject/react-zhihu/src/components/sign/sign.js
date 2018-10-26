@@ -63,10 +63,10 @@ class Sign extends Component {
             <p>{STATUS[this.state.currentState].title}</p>
           </div>
           <div className="body">
-            {this.state.currentState === SIGNIN ? <SignIn /> : <SignUp />}
+            {this.state.currentState === SIGNIN?<SignIn />:<SignUp />}
             <div className="info-tip">
               {STATUS[this.state.currentState].footerTip}
-              <span onClick={() => this.changeState()} >{STATUS[this.state.currentState].btnName}</span>
+              <span onClick={()=>this.changeState()} >{STATUS[this.state.currentState].btnName}</span>
             </div>
             <div className={this.state.currentDownload === SHOW ? "download-code": "download-code close-download-code"}></div>
           </div>

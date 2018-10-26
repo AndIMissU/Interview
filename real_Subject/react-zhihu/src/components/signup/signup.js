@@ -29,20 +29,20 @@ const COUNTRY_LIST = [ '中国 +86', '美国 +1', '日本 +81', '中国香港 +8
 
 // 注册验证方式
 const VERIFICATION_METHOD = {
-  message: {
+  useMessage: {
     placeholderTip: '请输入 6 位短信验证码',
-    VerificationCodeWay: '获取短信验证码',
+    methodInfo: '获取短信验证码',
     anotherMethod: '接收语音验证码'
   },
-  voice: {
+  useVoice: {
     placeholderTip: '请输入 6 位语音验证码',
-    VerificationCodeWay: '获取语音验证码',
+    methodInfo: '获取语音验证码',
     anotherMethod: '接收短信验证码'
   }
 }
 
-const MESSAGE = "message"
-const VOICE = "voice"
+const MESSAGE = "useMessage"
+const VOICE = "useVoice"
 class signUp extends Component {
   constructor(props) {
     super(props)
@@ -50,21 +50,25 @@ class signUp extends Component {
       phoneNumber: '',
       noPhoneNumber: false,
       invalidPhoneNumber: false,
+      verificationCode: '',
       showCountryList: false,
-      defaultVerificationMethod: MESSAGE,
+      currentVerificationMethod: MESSAGE,
       currentCountry: COUNTRY_LIST[0]
     }
     // 构造函数的绑定
-    this.setPhoneNumber = this.setPhoneNumber.bind(this)
     this.changeCountryListState = this.changeCountryListState.bind(this)
     this.chooseCountry = this.chooseCountry.bind(this)
+    this.setPhoneNumber = this.setPhoneNumber.bind(this)
     this.changeSignUpMethod = this.changeSignUpMethod.bind(this)
     this.focusPhoneInput = this.focusPhoneInput.bind(this)
+    this.setVerifivationCode = this.setVerifivationCode.bind(this)
+    this.getVerificationCode = this.getVerificationCode.bind(this)
   }
 
   // 绑定对应内容变化事件
-  setPhoneNumber(e){ this.setState({ phoneNumber: e.target.value }) } // 输入手机号码
   chooseCountry(e) { this.setState({ currentCountry: e.target.innerHTML }) } // 选择国家
+  setPhoneNumber(e){ this.setState({ phoneNumber: e.target.value }) } // 输入手机号码
+  setVerifivationCode(e) { this.setState({ verificationCode: e.target.value }) } // 输入验证码
 
   /* 
    * 更改注册的方法
@@ -72,39 +76,50 @@ class signUp extends Component {
    * 选择语音接收验证码 / 短信接收验证码
    */
   changeSignUpMethod() {
-    this.getVerificationCode()
     this.setState({
-      defaultVerificationMethod: this.state.defaultVerificationMethod === MESSAGE ? VOICE : MESSAGE
+      currentVerificationMethod: this.state.currentVerificationMethod === MESSAGE ? VOICE : MESSAGE
     },()=>{
-      console.log(VERIFICATION_METHOD[this.state.defaultVerificationMethod].VerificationCodeWay)
+      this.getVerificationCode()
     })
   }
   // 获取验证码
   getVerificationCode() {
-    this.checkForm()
+    if(this.checkPhoneState()) {
+      let _countryCode = this.state.currentCountry.split(' ')[1]
+      alert(_countryCode + ' ' + this.state.phoneNumber + ' 请求' + VERIFICATION_METHOD[this.state.currentVerificationMethod].methodInfo)
+    }
   }
-  // 验证表单
-  checkForm() {
+  // 验证手机号状态
+  checkPhoneState() {
+    let _noPhoneNumber = !this.state.phoneNumber
+    let _invalidPhoneNumber = false
+    if(!this.state.phoneNumber) _invalidPhoneNumber = false
+    else _invalidPhoneNumber = this.state.currentCountry === COUNTRY_LIST[0] && !/^1[34578]\d{9}$/.test(this.state.phoneNumber)
     this.setState({
-      noPhoneNumber: !this.state.phoneNumber,
-      invalidPhoneNumber: this.state.currentCountry === COUNTRY_LIST[0] && !/^1[34578]\d{9}$/.test(this.state.phoneNumber)
+      noPhoneNumber: _noPhoneNumber,
+      invalidPhoneNumber: _invalidPhoneNumber
     })
+    return !_noPhoneNumber && !_invalidPhoneNumber
   }
   // 聚焦手机号的输入框时 隐藏报错提示
   focusPhoneInput() {
-    this.phoneNumberInput.focus()  // 自动聚焦手机号这个输入框
+    this.phoneNumberInput.focus()  // 自动聚焦手机号的输入框
     this.setState({
       noPhoneNumber: false,
       invalidPhoneNumber: false
     })
   }
-  // 是否显示国家列表
+  // 验证验证码状态
+  checkVerificationCodeState() {
+
+  }
+  // 点击显示国家列表
   changeCountryListState() {
     this.setState({
       showCountryList: !this.state.showCountryList
     })
   }
-  // 是否渲染国家列表信息
+  // 渲染国家列表信息
   countryList() {
     return (
       <ul className="country-list" onClick={this.chooseCountry}>
@@ -131,14 +146,16 @@ class signUp extends Component {
               className={this.state.noPhoneNumber?'error-tip':''} 
               type="text" 
               placeholder="手机号" 
-              onChange={this.setPhoneNumber}/>
+              onBlur={this.setPhoneNumber}/>
           </div>
         </div>
-        <div className="verification-code">
-          <input type="text" placeholder={VERIFICATION_METHOD[this.state.defaultVerificationMethod].placeholderTip}/>
-          <p>{VERIFICATION_METHOD[this.state.defaultVerificationMethod].VerificationCodeWay}</p>
+        <div className={`verification-code ${}`}>
+          <input type="text"
+            onChange={this.setVerifivationCode}
+            placeholder={VERIFICATION_METHOD[this.state.currentVerificationMethod].placeholderTip}/>
+          <p onClick={this.getVerificationCode}>{VERIFICATION_METHOD[this.state.currentVerificationMethod].methodInfo}</p>
         </div>
-        <p onClick={this.changeSignUpMethod}>{VERIFICATION_METHOD[this.state.defaultVerificationMethod].anotherMethod}</p>
+        <p onClick={this.changeSignUpMethod}>{VERIFICATION_METHOD[this.state.currentVerificationMethod].anotherMethod}</p>
         <button className="subbmit">注册</button>
         <div className="agreement">
           <span>注册即代表同意

@@ -3,13 +3,13 @@ import './signin.scss';
 import EyeOpen from 'static/sign/eyeOpen.svg';
 import EyeClose from 'static/sign/eyeClose.svg';
 
-const PWDLOGIN = {
-  pwd: {
+const LOGIN_METHOD = {
+  usePassword: {
     verType: "手机验证码登录",
     info: "忘记密码？",
     href: 'https://www.zhihu.com/account/password_reset'
   },
-  vercode: {
+  useVerificationCode: {
     verType: "密码登录（手机号或邮箱）",
     info: "接收短信验证码"
   }
@@ -19,20 +19,20 @@ class signIn extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      defaultPwdLogin: "pwd",
-      passwordState: false,
+      currentLoginMethod: "usePassword",
+      showPassword: false,
       password: ''
     }
     // 构造函数的绑定
-    this.passwordType = this.passwordType.bind(this)
-    this.passwordSet = this.passwordSet.bind(this)
+    this.changePasswordType = this.changePasswordType.bind(this)
+    this.setPassword = this.setPassword.bind(this)
   }
-  passwordType() {
+  changePasswordType() {
     this.setState({
-      passwordState: !this.state.passwordState
+      showPassword: !this.state.showPassword
     })
   }
-  passwordSet(e) {
+  setPassword(e) {
     this.setState({
       password: e.target.value
     })
@@ -45,15 +45,15 @@ class signIn extends Component {
         </div>
         <div className="password">
           <input className={this.state.password.length?'':'no-password'} 
-            type={this.state.passwordState ? "text" : "password"}  
+            type={this.state.showPassword?"text":"password"}  
             placeholder="密码" 
             value={this.state.password} 
-            onChange={this.passwordSet} />
-          <img onClick={this.passwordType} src={this.state.passwordState ? EyeOpen : EyeClose} alt="passwordImg"/>
+            onChange={this.setPassword} />
+          <img onClick={this.changePasswordType} src={this.state.showPassword?EyeOpen:EyeClose} alt="passwordImg"/>
         </div>
         <div className="options">
-          <button className="switch-type">{PWDLOGIN[this.state.defaultPwdLogin].verType}</button>
-          <a className="plain" href="asdsajdk">{PWDLOGIN[this.state.defaultPwdLogin].info}</a>
+          <button className="switch-type">{LOGIN_METHOD[this.state.currentLoginMethod].verType}</button>
+          <a className="plain" href="asdsajdk">{LOGIN_METHOD[this.state.currentLoginMethod].info}</a>
         </div>
         <button className="submit">登录</button>
         <div className="other-types">

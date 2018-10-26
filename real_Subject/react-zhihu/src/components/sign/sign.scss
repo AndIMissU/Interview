@@ -5,14 +5,16 @@
   background: #b8e5f8 
     url('https://static.zhihu.com/heifetz/sign_bg.db29b0fbd2f78dd8c1b7.png') 
     no-repeat;
+  background-size: cover;
 
   .sign-wrap {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    height: calc(100% - 42px);
 
     .container {
-      margin-top: 10%;
       width: 432px;
       background-color: #fff;
 
@@ -79,45 +81,44 @@
       background-color: #8590a6;
       cursor: pointer;
     }
+  }
 
-    .footer {
-      margin-top: 8%;
-      height: 120px;
-      line-height: 21px;
-      text-align: center;
-      font-size: 12px;
-      text-shadow: 0 1px 2px #999;
+  .footer {
+    height: 120px;
+    line-height: 21px;
+    text-align: center;
+    font-size: 12px;
+    text-shadow: 0 1px 2px #999;
+    color: #fff;
+
+    a {
+      text-decoration: none;
       color: #fff;
 
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    span {
+      padding: 0 5px;
+    }
+
+    .model-company {
+      position: relative;
+      margin: 10px auto;
+      border-top: 1px solid #ebebeb;
+      width: 420px;
+
+      img {
+        margin-top: 10px;          
+        width: 138px;
+      }
+
       a {
-        text-decoration: none;
-        color: #fff;
-
-        &:hover {
-          text-decoration: underline;
-        }
-      }
-
-      span {
-        padding: 0 5px;
-      }
-
-      .model-company {
-        position: relative;
-        margin: 10px auto;
-        border-top: 1px solid #ebebeb;
-        width: 420px;
-
-        img {
-          margin-top: 10px;          
-          width: 138px;
-        }
-
-        a {
-          position: absolute;
-          top: 12px;
-          left: 175px;
-        }
+        position: absolute;
+        top: 12px;
+        left: 175px;
       }
     }
   }

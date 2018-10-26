@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './signup.scss';
+import AccountInput from 'components/accountinput/accountinput';
 
 // 各国国家区号
 const COUNTRY_LIST = [ '中国 +86', '美国 +1', '日本 +81', '中国香港 +852', '中国台湾 +886', '马来西亚 +60', '澳大利亚 +61', 
@@ -224,6 +225,7 @@ class signUp extends Component {
               type='text' />
           </div>
         </div>
+        <AccountInput />
         <div className={`verification-code
           ${this.state.noVerficationCode?('no-verfication-code-' + this.state.currentVerificationMethod):''}
           ${this.state.invalidVerificationCode?'invalid-vertification-code':''}`}

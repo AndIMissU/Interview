@@ -43,7 +43,7 @@ const VERIFICATION_METHOD = {
 
 const MESSAGE = 'useMessage'
 const VOICE = 'useVoice'
-const MAX_SECOND = 5      // 默认等待的秒数
+const MAX_SECOND = 60      // 默认等待的秒数
 class signUp extends Component {
   constructor(props) {
     super(props)
@@ -65,29 +65,18 @@ class signUp extends Component {
       currentCountry: COUNTRY_LIST[0],  // 当前国家
       currentCountryCode: COUNTRY_LIST[0].split(' ')[1]  // 当前国家的 手机区号
     }
-
-    // 构造函数的绑定
-    this.changeCountryListState = this.changeCountryListState.bind(this)
-    this.chooseCountry = this.chooseCountry.bind(this)
-    this.setPhoneNumber = this.setPhoneNumber.bind(this)
-    this.changeSignUpMethod = this.changeSignUpMethod.bind(this)
-    this.focusPhoneInput = this.focusPhoneInput.bind(this)
-    this.focusVerificationCodeInput = this.focusVerificationCodeInput.bind(this)
-    this.setVerifivationCode = this.setVerifivationCode.bind(this)
-    this.getVerificationCode = this.getVerificationCode.bind(this)
-    this.requireRegisterState = this.requireRegisterState.bind(this)
   }
 
   // 绑定对应内容变化事件
-  setPhoneNumber(e){ this.setState({ phoneNumber: e.target.value }) } // 输入手机号码
-  setVerifivationCode(e) { this.setState({ verificationCode: e.target.value }) } // 输入验证码
+  setPhoneNumber = (e)=>{ this.setState({ phoneNumber: e.target.value }) } // 输入手机号码
+  setVerifivationCode = (e)=>{ this.setState({ verificationCode: e.target.value }) } // 输入验证码
 
   /* 
    * 更改注册的方法
    * 验证输入框内容
    * 选择语音接收验证码 / 短信接收验证码
    */
-  changeSignUpMethod() {
+  changeSignUpMethod = ()=>{
     this.setState({
       currentVerificationMethod: this.state.currentVerificationMethod === MESSAGE ? VOICE : MESSAGE,
     },()=>{
@@ -96,7 +85,7 @@ class signUp extends Component {
   }
 
   // 获取验证码
-  getVerificationCode() {
+  getVerificationCode = ()=>{
     if (!this.checkPhoneState()) return  // 如果手机号未填则返回
     if (this.state.isSendVerficationCode) return  // 在60秒内验证码是已经发送的状态 如果已经发送则返回
     this.setState({
@@ -128,7 +117,7 @@ class signUp extends Component {
   }
 
   // 检查手机号状态
-  checkPhoneState() {
+  checkPhoneState = ()=>{
     let _noPhoneNumber = !this.state.phoneNumber
     let _invalidPhoneNumber = false
     if (_noPhoneNumber) {
@@ -144,7 +133,7 @@ class signUp extends Component {
   }
 
   // 聚焦手机号的输入框时 隐藏报错提示
-  focusPhoneInput() {
+  focusPhoneInput = ()=>{
     this.setState({
       noPhoneNumber: false,
       invalidPhoneNumber: false
@@ -154,7 +143,7 @@ class signUp extends Component {
   }
 
   // 检查验证码状态
-  checkVerificationCodeState() {
+  checkVerificationCodeState = ()=>{
     let _noVerficationCode = !this.state.verificationCode
     let _invalidVerificationCode = false
     if (_noVerficationCode) {
@@ -170,7 +159,7 @@ class signUp extends Component {
   }
 
   // 聚焦验证码的输入框时 隐藏报错提示
-  focusVerificationCodeInput() {
+  focusVerificationCodeInput = ()=>{
     this.setState({
       noVerficationCode: false,
       invalidVerificationCode: false
@@ -180,14 +169,14 @@ class signUp extends Component {
   }
 
   // 点击显示国家列表
-  changeCountryListState() {
+  changeCountryListState = ()=>{
     this.setState({
       showCountryList: !this.state.showCountryList
     })
   }
 
   // 选择国家
-  chooseCountry(e) {
+  chooseCountry = (e)=>{
     let _currentCountry = e.target.innerHTML
     let _currentCountryCode = _currentCountry.split(' ')[1]
     this.setState({
@@ -196,7 +185,7 @@ class signUp extends Component {
     })
   }
   // 渲染国家列表信息
-  countryList() {
+  countryList = ()=>{
     return (
       <ul className='country-list' onClick={this.chooseCountry}>
         {COUNTRY_LIST.map((country, index) => (
@@ -207,12 +196,12 @@ class signUp extends Component {
   }
 
   // 获取注册信息并传入信息
-  requireRegisterState() {
+  requireRegisterState = ()=>{
     if (!this.checkPhoneState()) return
     if (!this.checkVerificationCodeState()) return
     alert(
       '电话号码为：' + this.state.currentCountryCode + ' ' + this.state.phoneNumber
-      + '\n 验证码为：' + this.state.verificationCode
+      + '\n验证码为：' + this.state.verificationCode
     )
   }
 

@@ -27,38 +27,74 @@ class usePassword extends Component {
       loginMethodByPassword: true,
       usePasswordMethod: this.state.usePasswordMethod === OVERSEAS_PHONE ? EMAIL : OVERSEAS_PHONE
     },()=>{
-      return this.refs['byPassword'].changeCountryListButton()
+      return this.refs['usePassword'].changeCountryListButton()
     })
   }
 
-  // 改变登录方式 选择用手机号登录
-  changeLoginMethodToByPhone = ()=>{
-    this.setState({
-      loginMethodByPassword: false
-    })
-  }
-  // 改变登录方式 选择用密码登录
-  changeLoginMethodToByPassword = ()=>{
-    this.setState({
-      loginMethodByPassword: true
-    })
-  }
+  // 改变登录方式 
+  loginByPhone = ()=>{ this.setState({ loginMethodByPassword: false }) } // 选择用手机号登录
+  loginByPassword = ()=>{ this.setState({ loginMethodByPassword: true }) } // 选择用密码登录
 
   // 改变显示社交账号登录的状态
-  changeSocialAccountState = ()=>{
-    this.setState({
-      showSocialAccountMethod: true
-    })
+  loginBySocial = ()=>{ this.setState({ showSocialAccountMethod: true }) }
+
+  // 验证手机号和邮箱的状态
+  checkPhoneState = ()=>{
+    return (
+      this.state.loginMethodByPassword?
+        this.refs['usePassword'].checkPhoneState()
+        :this.refs['usePhone'].checkPhoneState()
+    )
   }
+
+  // 验证密码或者验证码状态
+  checkVerState = ()=>{
+    return (
+      this.state.loginMethodByPassword ?
+        this.refs['usePassword'].checkPasswordState()
+        :this.refs['usePhone'].checkVerCodeState()
+    )
+  }
+  // 获取手机号或者邮箱
+  getPhone = ()=>{
+    return (
+      this.state.loginMethodByPassword?
+        this.refs['usePassword'].getPhoneInfo()
+        :this.refs['usePhone'].getPhoneInfo()
+    )
+  }
+  // 获取密码或者验证码
+  getPasswrodOrCode = ()=>{
+    return (
+      this.state.loginMethodByPassword?
+        ('密码：'+this.refs['usePassword'].getPassword())
+        :('验证码：'+this.refs['usePhone'].getCode())
+    )
+  }
+
+  // 登录
+  getSignInfo = ()=>{
+    if(!this.checkPhoneState()) return
+    if (!this.checkVerState()) return
+    let _phone = this.getPhone()
+    let _code = this.getPasswrodOrCode()
+    let _text = _phone.hasOwnProperty('currentCountryCode')? 
+      '手机号：'+ _phone.currentCountryCode+ ' ' + _phone.phoneNumber + '\n' + _code
+      : '手机号/邮箱：'+ _phone.phoneNumber + '\n' + _code
+    alert(
+      _text
+    )
+  }
+
 
   render() {
     return (
       <div className='use-password'>
         {this.state.loginMethodByPassword ? 
-          <ByPassword changeLoginMethodToByPhone = {this.changeLoginMethodToByPhone}  ref="byPassword"/>
-          :<ByPhone changeLoginMethodState={true} changeLoginMethodToByPassword={this.changeLoginMethodToByPassword}/>
+          <ByPassword ref='usePassword' loginByPhone = {this.loginByPhone}/>
+          :<ByPhone ref='usePhone' changeLoginMethodState={true} loginByPassword={this.loginByPassword}/>
         }
-        <button className='submit'>登录</button>
+        <button className='submit' onClick={this.getSignInfo}>登录</button>
         <div className='other-types'>
           <button onClick={()=>{this.props.chooseSignInMethodEvent(QR_CODE)}}>二维码登录</button>
           <span>·</span>
@@ -79,7 +115,7 @@ class usePassword extends Component {
                   </a>
                 </div>
               )
-              :<button onClick={this.changeSocialAccountState}>社交账号登录</button>}
+              :<button onClick={this.loginBySocial}>社交账号登录</button>}
           </div>
         </div>
       </div>

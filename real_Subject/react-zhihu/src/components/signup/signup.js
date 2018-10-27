@@ -6,7 +6,7 @@ class signUp extends Component {
   // 获取注册信息并传入信息
   requireRegisterState = ()=>{
     if (!this.checkPhoneState()) return
-    if (!this.checkVerificationCodeState()) return
+    if (!this.checkVerCodeState()) return
     let _phoneState = this.getPhoneInfo()
     let _verificationCode = this.getCode()
     alert(
@@ -18,7 +18,7 @@ class signUp extends Component {
   // 调用子组件的方法
   checkPhoneState = ()=>{ return this.refs['signByPhone'].checkPhoneState() } // 检查手机号状态
   getPhoneInfo = ()=>{ return this.refs['signByPhone'].getPhoneInfo() } // 获取手机号
-  checkVerificationCodeState = ()=>{ return this.refs['signByPhone'].checkVerificationCodeState() } // 检查验证码状态
+  checkVerCodeState = ()=>{ return this.refs['signByPhone'].checkVerCodeState() } // 检查验证码状态
   getCode = ()=> { return this.refs['signByPhone'].getCode() } // 获取验证码
 
   render() {

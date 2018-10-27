@@ -48,7 +48,7 @@ class accountInut extends Component {
       phoneNumber: this.state.phoneNumber,
     }
     if(this.state.hasCountryList) newState['currentCountryCode'] = this.state.currentCountryCode
-    return newState 
+    return newState
   }
 
   // 供父组件改变是否显示国家列表

@@ -24,15 +24,15 @@ class byPhone extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      currentVerificationMethod: MESSAGE,  // 当前发送验证码的方式
+      currentVerWay: MESSAGE,  // 当前发送验证码的方式
       // showChangeLoginMethod: false, // 是否显示切换登录方式按钮
       showChangeLoginMethod: props.changeLoginMethodState, // 是否显示切换登录方式按钮
 
-      verificationCode: '',  // 验证码
-      noVerficationCode: false,  // 是否没有填入验证码
-      invalidVerificationCode: false,  // 验证码是否无效
-      isSendVerficationCode: false,  // 验证码是否发送
-      reSendVerficationCode: false,  // 是否重新发送验证码
+      verCode: '',  // 验证码
+      noVerCode: false,  // 是否没有填入验证码
+      invalidVerCode: false,  // 验证码是否无效
+      ifSendVerCode: false,  // 验证码是否发送
+      reSendVerCode: false,  // 是否重新发送验证码
       currentSecond: MAX_SECOND,  // 当前剩余等待的秒数
     }
   }
@@ -40,27 +40,27 @@ class byPhone extends Component {
   // 输入验证码
   setVerifivationCode = (e)=>{
     this.setState({
-      verificationCode: e.target.value
+      verCode: e.target.value
     })
   }
  
   // 更改方法
   // 验证输入框内容
   // 选择语音接收验证码 / 短信接收验证码
-  changVerificationMethod = ()=>{
+  changVerMethod = ()=>{
     this.setState({
-      currentVerificationMethod: this.state.currentVerificationMethod === MESSAGE ? VOICE : MESSAGE,
+      currentVerWay: this.state.currentVerWay === MESSAGE ? VOICE : MESSAGE,
     },()=>{
-      this.getVerificationCode()
+      this.getVerCode()
     })
   }
 
   // 获取验证码
-  getVerificationCode = ()=>{
+  getVerCode = ()=>{
     if (!this.checkPhoneState()) return  // 如果手机号未填则返回
-    if (this.state.isSendVerficationCode) return  // 在60秒内验证码是已经发送的状态 如果已经发送则返回
+    if (this.state.ifSendVerCode) return  // 在60秒内验证码是已经发送的状态 如果已经发送则返回
     this.setState({
-      isSendVerficationCode: true
+      ifSendVerCode: true
     },()=>{
       let _timer = setInterval(()=>{
         this.setState({
@@ -69,8 +69,8 @@ class byPhone extends Component {
         if(this.state.currentSecond === 0) {
           // 将当前秒数还原为默认状态 验证码变为未发送状态 重新发送验证码状态置为true
           this.setState({
-            isSendVerficationCode: false,
-            reSendVerficationCode: true,
+            ifSendVerCode: false,
+            reSendVerCode: true,
             currentSecond: MAX_SECOND   
           })
           clearInterval(_timer)
@@ -83,38 +83,38 @@ class byPhone extends Component {
         _state.currentCountryCode + ' '
         + _state.phoneNumber 
         + ' 请求'
-        + VERIFICATION_METHOD[this.state.currentVerificationMethod].methodInfo
+        + VERIFICATION_METHOD[this.state.currentVerWay].methodInfo
       )
     }
   }
 
   // 检查验证码状态
-  checkVerificationCodeState = ()=>{
-    let _noVerficationCode = !this.state.verificationCode
-    let _invalidVerificationCode = false
-    if (_noVerficationCode) {
-      _invalidVerificationCode = false
+  checkVerCodeState = ()=>{
+    let _noVerCode = !this.state.verCode
+    let _invalidVerCode = false
+    if (_noVerCode) {
+      _invalidVerCode = false
     } else {
-      _invalidVerificationCode = !/^\d{6}$/.test(this.state.verificationCode)
+      _invalidVerCode = !/^\d{6}$/.test(this.state.verCode)
     }
     this.setState({
-      noVerficationCode: _noVerficationCode,
-      invalidVerificationCode: _invalidVerificationCode
+      noVerCode: _noVerCode,
+      invalidVerCode: _invalidVerCode
     })
-    return !_noVerficationCode && !_invalidVerificationCode
+    return !_noVerCode && !_invalidVerCode
   }
 
   // 聚焦验证码的输入框时 隐藏报错提示
-  focusVerificationCodeInput = ()=>{
+  focusVerCodeInput = ()=>{
     this.setState({
-      noVerficationCode: false,
-      invalidVerificationCode: false
+      noVerCode: false,
+      invalidVerCode: false
     },()=>{
-      this.verificationCodeInput.focus() // 自动聚焦验证码的输入框
+      this.verCodeInput.focus() // 自动聚焦验证码的输入框
     })
   }
   // 给父组件提供验证码
-  getCode = ()=>{ return this.state.verificationCode }
+  getCode = ()=>{ return this.state.verCode }
   // 调用子组件的方法
   checkPhoneState = ()=>{ return this.refs['accountInput'].checkPhoneState() } // 检查账户输入的状态
   getPhoneInfo = ()=>{ return this.refs['accountInput'].getPhoneInfo() } // 获取手机号
@@ -124,27 +124,27 @@ class byPhone extends Component {
       <div>
         <AccountInput ref='accountInput' hasCountryList={true} placeholder='手机号'/>
         <div className={`verification-code
-          ${this.state.noVerficationCode?('no-verfication-code-' + this.state.currentVerificationMethod):''}
-          ${this.state.invalidVerificationCode?'invalid-vertification-code':''}`}
-          onClick={this.focusVerificationCodeInput}>
-          <input ref={(input) => { this.verificationCodeInput = input }} 
+          ${this.state.noVerCode?('no-verfication-code-' + this.state.currentVerWay):''}
+          ${this.state.invalidVerCode?'invalid-vertification-code':''}`}
+          onClick={this.focusVerCodeInput}>
+          <input ref={(input) => { this.verCodeInput = input }} 
             onChange={this.setVerifivationCode}
-            placeholder={VERIFICATION_METHOD[this.state.currentVerificationMethod].placeholderTip}
+            placeholder={VERIFICATION_METHOD[this.state.currentVerWay].placeholderTip}
             type='text' />
-          <p onClick={this.getVerificationCode}
-            className={this.state.isSendVerficationCode?'timer-count-down':''}>
-            {(!this.state.isSendVerficationCode && this.state.reSendVerficationCode)?'重发':''}
-            {this.state.isSendVerficationCode?(this.state.currentSecond+' 秒后可重发'):VERIFICATION_METHOD[this.state.currentVerificationMethod].methodInfo}
+          <p onClick={this.getVerCode}
+            className={this.state.ifSendVerCode?'timer-count-down':''}>
+            {(!this.state.ifSendVerCode && this.state.reSendVerCode)?'重发':''}
+            {this.state.ifSendVerCode?(this.state.currentSecond+' 秒后可重发'):VERIFICATION_METHOD[this.state.currentVerWay].methodInfo}
           </p>
         </div>
         {this.state.showChangeLoginMethod?(
-          <div className="change-login-method" onClick={this.props.changeLoginMethodToByPassword}>
+          <div className="change-login-method" onClick={this.props.loginByPassword}>
             密码登录（手机号或邮箱）
           </div>
         ):''}
-        <div className={`not-send-verification-code ${this.state.isSendVerficationCode?'sent-verfication-code':''}`}
-          onClick={this.changVerificationMethod}>
-          {VERIFICATION_METHOD[this.state.currentVerificationMethod].anotherMethod}
+        <div className={`not-send-verification-code ${this.state.ifSendVerCode?'sent-verfication-code':''}`}
+          onClick={this.changVerMethod}>
+          {VERIFICATION_METHOD[this.state.currentVerWay].anotherMethod}
         </div>
       </div>
     )

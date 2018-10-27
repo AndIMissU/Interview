@@ -5,70 +5,77 @@
   border-bottom: 1px solid #ebebeb;
   height: 48px;
 
-  .select-counrty {
-    position: relative;
-    padding:0 22px 0 0;
-    height: 100%;
-    font-size: 14px;
-    line-height: 48px;
-    color: #8590a6;
-    cursor: pointer;
-    user-select: none;
+  .country-wrap {
+    display: flex;
+    flex-direction: row;
 
-    .country-list {
-      overflow: scroll;
-      z-index: 203;
-      position: absolute;
-      top: 0;
-      left: -16px;
-      border: 1px solid #ebebeb;
-      box-shadow: 0 5px 20px rgba(26,26,26,.1);
-      padding: 8px 0;
-      width: 200px;
-      height: 516px;
-      background-color: #fff;
-      list-style: none;
-
-      li {
-        padding: 0 20px;
-        height: 40px;
-        line-height: 40px;
-
-        &:hover {
-          background-color: #f6f6f6;
+    .select-counrty {
+      position: relative;
+      padding:0 22px 0 0;
+      height: 100%;
+      font-size: 14px;
+      line-height: 48px;
+      color: #8590a6;
+      cursor: pointer;
+      user-select: none;
+  
+      .country-list {
+        overflow: scroll;
+        z-index: 203;
+        position: absolute;
+        top: 0;
+        left: -16px;
+        border: 1px solid #ebebeb;
+        box-shadow: 0 5px 20px rgba(26,26,26,.1);
+        padding: 8px 0;
+        width: 200px;
+        height: 516px;
+        background-color: #fff;
+        list-style: none;
+  
+        li {
+          padding: 0 20px;
+          height: 40px;
+          line-height: 40px;
+  
+          &:hover {
+            background-color: #f6f6f6;
+          }
         }
       }
+  
+      &::before,
+      &::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        width: 10px;
+        height: 10px;
+        transform: rotate(45deg) scale(0.5,0.5);
+      }
+  
+      &::before {
+        top: 15px;
+        border-top: 3px solid #8590a6;
+        border-left: 3px solid #8590a6;
+      }
+  
+      &::after {
+        bottom: 15px;
+        border-right: 3px solid #8590a6;
+        border-bottom: 3px solid #8590a6;
+      }
     }
-
-    &::before,
-    &::after {
-      content: '';
-      position: absolute;
-      right: 0;
-      width: 10px;
-      height: 10px;
-      transform: rotate(45deg) scale(0.5,0.5);
-    }
-
-    &::before {
-      top: 15px;
-      border-top: 3px solid #8590a6;
-      border-left: 3px solid #8590a6;
-    }
-
-    &::after {
-      bottom: 15px;
-      border-right: 3px solid #8590a6;
-      border-bottom: 3px solid #8590a6;
+  
+    span {
+      margin: 13px 12px 0;
+      width: 1px;
+      height: 22px;
+      background-color: #ebebeb;
     }
   }
 
-  span {
-    margin: 13px 12px 0;
-    width: 1px;
-    height: 22px;
-    background-color: #ebebeb;
-  }
+  
 
   .phone-wrap {
     position: relative;

@@ -1,64 +1,68 @@
 import React, { Component } from 'react'
 import './usepassword.scss'
-import EyeOpen from 'static/sign/eyeOpen.svg';
-import EyeClose from 'static/sign/eyeClose.svg';
 import WeChat from 'static/sign/wechat.svg';
 import WeiBo from 'static/sign/weibo.svg'
 import QQ from 'static/sign/qq.svg'
+import ByPhone from 'components/byphone/byphone'
+import ByPassword from 'components/bypassword/bypassword'
 
-const LOGIN_METHOD = {
-  usePassword: {
-    verType: '手机验证码登录',
-    info: '忘记密码？',
-  },
-  useVerificationCode: {
-    verType: '密码登录（手机号或邮箱）',
-    info: '接收短信验证码'
-  }
-}
-
-const PASSWORD = 'usePassword'
 const QR_CODE= 'useQRCode'
+const OVERSEAS_PHONE = '海外手机登录'
+const EMAIL = '邮箱账号登陆'
 
 class usePassword extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      currentLoginMethod: PASSWORD,
-      password: '',
-      showPassword: false,
-      showSocialAccountMethod: false
+      loginMethodByPassword: true,  // 是否用密码登录
+      ifshowCountryList: false,  // 是否显示国家列表
+      usePasswordMethod: OVERSEAS_PHONE, // 用密码登录 邮箱/手机号
+      showSocialAccountMethod: false  // 是否显示用社交账号登录
     }
   }
 
-  // 绑定对应内容变化事件  
-  changePasswordType = ()=>{ this.setState({ showPassword: !this.state.showPassword }) } // 修改password密码框的类型
-  setPassword = (e)=>{ this.setState({ password: e.target.value }) } // 输入密码
-  changeSocialAccountState = ()=>{ this.setState({ showSocialAccountMethod: true }) } //显示社交账户登陆选项
+  // 调用子组件的方法 是否显示国家列表按钮
+  changeCountryListButton = ()=>{
+    this.setState({
+      loginMethodByPassword: true,
+      usePasswordMethod: this.state.usePasswordMethod === OVERSEAS_PHONE ? EMAIL : OVERSEAS_PHONE
+    },()=>{
+      return this.refs['byPassword'].changeCountryListButton()
+    })
+  }
+
+  // 改变登录方式 选择用手机号登录
+  changeLoginMethodToByPhone = ()=>{
+    this.setState({
+      loginMethodByPassword: false
+    })
+  }
+  // 改变登录方式 选择用密码登录
+  changeLoginMethodToByPassword = ()=>{
+    this.setState({
+      loginMethodByPassword: true
+    })
+  }
+
+  // 改变显示社交账号登录的状态
+  changeSocialAccountState = ()=>{
+    this.setState({
+      showSocialAccountMethod: true
+    })
+  }
 
   render() {
     return (
       <div className='use-password'>
-        <div className='account'>
-          <input type='text' placeholder='手机号或邮箱'/>
-        </div>
-        <div className='password'>
-          <input className={this.state.password.length?'':'no-password'} 
-            type={this.state.showPassword?'text':'password'}  
-            placeholder='密码' 
-            value={this.state.password} 
-            onChange={this.setPassword} />
-          <img onClick={this.changePasswordType} src={this.state.showPassword?EyeOpen:EyeClose} alt='passwordImg'/>
-        </div>
-        <div className='options'>
-          <button className='switch-type'>{LOGIN_METHOD[this.state.currentLoginMethod].verType}</button>
-          <a className='plain' target='_blank' rel='noopener noreferrer' href='https://www.zhihu.com/account/password_reset'>{LOGIN_METHOD[this.state.currentLoginMethod].info}</a>
-        </div>
+        {this.state.loginMethodByPassword ? 
+          <ByPassword changeLoginMethodToByPhone = {this.changeLoginMethodToByPhone}  ref="byPassword"/>
+          :<ByPhone changeLoginMethodState={true} changeLoginMethodToByPassword={this.changeLoginMethodToByPassword}/>
+        }
         <button className='submit'>登录</button>
         <div className='other-types'>
           <button onClick={()=>{this.props.chooseSignInMethodEvent(QR_CODE)}}>二维码登录</button>
           <span>·</span>
-          <button>海外手机登录</button>
+          <button onClick={this.changeCountryListButton}>{this.state.usePasswordMethod}</button>
           <span>·</span>
           <div>
             {this.state.showSocialAccountMethod?

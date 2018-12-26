@@ -1,0 +1,96 @@
+#### 1. 在render内部 使用 && 代替三元运算符
+  ```JavaScript
+  推荐以下写法
+  render() {
+    return (
+      test && <Child />   // 此处test为boolean值
+    )
+  }
+
+  代替以下写法（不建议）
+  render() {
+    return (
+      {
+        test ? <Child /> : null
+      }
+    )
+  }
+  ```
+#### 2. 函数方法的绑定放在 constructor 内部, 且不在 constructor 内部使用 setState 方法
+  ```JavaScript
+  constructor(props) {
+    super(props)
+    // Don't call this.setState() here!
+    this.state = { counter: 0 }
+    this.handleClick = this.handleClick.bind(this)
+  }
+  ```
+#### 3. 不将 props 的值赋值给 state（因为可以直接使用 this.props调用，并且更新 props 内部的值不会更新state会容易造成 bug ）
+  ```JavaScript
+  // 
+  constructor(props) {
+    super(props);
+    // Don't do this!
+    this.state = { color: props.color }
+  }
+  ```
+
+#### 4. 尽量不在 componentDidMount 方法中使用 setState 方法。应为刚刚 render 渲染结束，再次进行 setSstate 会触发一次额外的数据渲染。但是在 componentWillMount 方法中调用 setState 不会触发额外数据渲染。
+
+#### 5. 可以使用 .defaultProps 避免父组件不传 props 至子组件的情况。通常使用这个设置默认 props
+
+#### 6. 状态更新可能是异步的，所以不应该在 setState内部使用 this.state 和 this.props。
+  ```JavaScript
+  // Wrong 错误写法
+  this.setState({
+    counter: this.state.counter + this.props.increment,
+  })
+
+  // Right 正确写法
+  this.setState((prevState, props) => ({
+    counter: prevState.counter + props.increment
+  }))
+  ```
+#### 7. 当你有处理多个受控的input元素时，你可以通过给每个元素添加一个name属性，来让处理函数根据 event.target.name的值来选择做什么。
+  ```JavaScript
+  class Reservation extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        isGoing: true,
+        numberOfGuests: 2
+      };
+      
+      this.handleInputChange = this.handleInputChange.bind(this);
+    }
+
+    handleInputChange(event) {
+      const target = event.target;
+      const value = target.type === 'checkbox' ? target.checked : target.value;
+      const name = target.name;
+
+      this.setState({
+        [name]: value
+      });
+    }
+
+    render() {
+      return (
+        <form>
+          <label>
+            Is going:
+            <input name="isGoing" type="checkbox" checked={this.state.isGoing} onChange={this.handleInputChange} />
+          </label>
+          <br />
+          <label>
+            Number of guests:
+            <input name="numberOfGuests" type="number" value={this.state.numberOfGuests} onChange={this.handleInputChange} />
+          </label>
+        </form>
+      );
+    }
+  }
+  ```
+#### 
+  ```JavaScript
+  ```
